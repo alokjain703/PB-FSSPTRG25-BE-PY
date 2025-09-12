@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 
 class UserSchema(BaseModel):
@@ -12,7 +12,7 @@ class UserInDB(UserSchema):
     hashed_password: str
 
 class UserCreate(BaseModel):
-    username: str
-    email: str
-    full_name: str
-    password: str
+    username: str = Field(..., example="johndoe")
+    email: str = Field(..., example="johndoe@example.com")
+    full_name: str = Field(..., example="John Doe")
+    password: str = Field(..., example="password123")

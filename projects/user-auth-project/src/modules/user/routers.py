@@ -7,6 +7,7 @@ from src.core.db_connection import get_db_session
 
 router = APIRouter()
 
+# create user router
 @router.post("/users/", response_model=UserSchema)
 async def create_user(user: UserCreate, db: AsyncSession = Depends(get_db_session)):
     return await user_services.create_user(db, **user.dict())
@@ -18,9 +19,6 @@ async def read_user(username: str, db: AsyncSession = Depends(get_db_session)):
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
-# create user router
-@router.post("/users/", response_model=UserSchema, status_code=status.HTTP_201_CREATED)
-async def create_user(user: UserCreate, db: AsyncSession = Depends(get_db_session)):
-    return await user_services.create_user(db, **user.dict())
+
 
 

@@ -54,3 +54,7 @@ pip3 install pydantic-settings
 pip3 install "sqlalchemy>=2.0.0" aiosqlite
 
 - add sqlite reader extension in vscode
+
+### JWT, passlib, Bcrypt
+$ pip install passlib[bcrypt]
+$ pip install python-jose[cryptography]

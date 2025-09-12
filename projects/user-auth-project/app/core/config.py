@@ -9,6 +9,9 @@ class Settings(BaseSettings):
     debug_mode: bool = False
     admin_email: str = "admin1@example.com"
     items_per_user: int = 150
+    access_token_expire_minutes: int = 30  # 30 minutes
+    secret_key: str = "dev_my_secret_key123980"
+    algorithm: str = "HS256"
 
     env_file_name: ClassVar[str] = ".env.development"
     # Dynamically set the env_file based on APP_ENV environment variable

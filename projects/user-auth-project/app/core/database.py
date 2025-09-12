@@ -13,3 +13,12 @@ class Ticket(Base):
     price: Mapped[float] = mapped_column(nullable=True)
     show: Mapped[str | None]
     user: Mapped[str | None]
+
+class User(Base):
+    __tablename__ = "users"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    username: Mapped[str] = mapped_column(nullable=False, unique=True)
+    email: Mapped[str] = mapped_column(nullable=False, unique=True)
+    full_name: Mapped[str | None] = mapped_column(nullable=True)
+    hashed_password: Mapped[str] = mapped_column(nullable=False)
+    disabled: Mapped[int] = mapped_column(default=0)  # 0 for False, 1 for True

@@ -1,13 +1,14 @@
 from pydantic import BaseModel
 from typing import Optional
 
-class User(BaseModel):
+class UserSchema(BaseModel):
+    id: int
     username: str
     email: Optional[str] = None
     full_name: Optional[str] = None
     disabled: Optional[bool] = None
 
-class UserInDB(User):
+class UserInDB(UserSchema):
     hashed_password: str
 
 class UserCreate(BaseModel):

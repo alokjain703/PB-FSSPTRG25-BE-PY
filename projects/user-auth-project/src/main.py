@@ -3,6 +3,11 @@ from .core.config import settings
 from contextlib import asynccontextmanager
 from src.core.db_connection import get_db_session, get_engine
 from src.core.database import Base
+# import user model
+from src.modules.user import models as user_models
+
+#import routers 
+from src.modules.user.routers import router as user_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -13,9 +18,14 @@ async def lifespan(app: FastAPI):
     await engine.dispose()
 app = FastAPI(lifespan=lifespan)
 
+
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
+
+# include routers with prefix and tags
+app.include_router(user_router, prefix="/users", tags=["users"])
 
 # for testing purpose
 @app.get("/info")

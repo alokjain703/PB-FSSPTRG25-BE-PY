@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from .core.config import settings
 from contextlib import asynccontextmanager
-from app.core.db_connection import get_db_session, get_engine
-from app.core.database import Base
+from src.core.db_connection import get_db_session, get_engine
+from src.core.database import Base
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

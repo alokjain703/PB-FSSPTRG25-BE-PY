@@ -26,11 +26,11 @@ pip install "fastapi[all]"
 
 ### Running The App
 ```bash
-$ uvicorn app.main:app  --reload   
+$ uvicorn src.main:app  --reload   
 ``` 
 Run on different port   
 ```bash
-$ uvicorn app.main:app --port 8001 --reload
+$ uvicorn src.main:app --port 8001 --reload
 ```
 
 ### switching the environment

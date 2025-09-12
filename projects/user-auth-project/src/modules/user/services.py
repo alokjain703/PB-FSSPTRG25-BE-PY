@@ -1,8 +1,8 @@
 # User services
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from app.modules.user.models import User
-from app.modules.user.schemas import UserSchema
+from src.modules.user.models import User
+from src.modules.user.schemas import UserSchema
 from passlib.context import CryptContext
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 # Function to get user by username

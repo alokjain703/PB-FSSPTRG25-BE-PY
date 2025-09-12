@@ -50,3 +50,7 @@ for Pydantic settings
 
 pip3 install pydantic-settings
 
+### Sqlite and SQLachemy
+pip3 install "sqlalchemy>=2.0.0" aiosqlite
+
+- add sqlite reader extension in vscode

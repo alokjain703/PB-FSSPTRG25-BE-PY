@@ -1,2 +1,2 @@
 source ../../.venv/bin/activate
-uvicorn main:app --reload
+uvicorn src.main:app --reload

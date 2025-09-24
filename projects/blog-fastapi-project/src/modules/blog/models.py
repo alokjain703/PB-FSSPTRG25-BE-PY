@@ -1,22 +1,12 @@
 # BlogPost model based on SQLAlchemy
 from datetime import datetime
-from enum import Enum
+
 from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Enum as SQLEnum
 from src.core.database import Base
 from sqlalchemy.orm import  Mapped, mapped_column, relationship
 from src.modules.user.models import User
+from src.modules.blog.enums import PostStatus, CommentApprovalStatus
 
-# Define enums
-class PostStatus(str, Enum):
-    DRAFT = "draft"
-    PUBLISHED = "published"
-    ARCHIVED = "archived"
-    PENDING_REVIEW = "pending_review"
-
-class CommentApprovalStatus(int, Enum):
-    PENDING = 0
-    APPROVED = 1
-    REJECTED = 2
 
 # mapped_column is the modern, recommended approach introduced in SQLAlchemy 2.0. It provides:
 

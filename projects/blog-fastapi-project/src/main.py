@@ -9,6 +9,8 @@ from src.modules.user import models as user_models
 #import routers 
 from src.modules.user.routers import router as user_router
 from src.modules.auth.routers import router as auth_router
+from src.modules.blog.routers import router as blog_router
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -26,11 +28,12 @@ def read_root():
     return {"Hello": "World"}
 
 # include routers with prefix and tags
-app.include_router(user_router, prefix="/users", tags=["users"])
-app.include_router(auth_router, prefix="/auth", tags=["auth"])
+app.include_router(user_router, prefix="/api", tags=["users"])
+app.include_router(auth_router, prefix="/api", tags=["auth"])
+app.include_router(blog_router, prefix="/api", tags=["blogs"])
 
 # for testing purpose
-@app.get("/info")
+@app.get("/api/info")
 async def info():
     return {
         "app_name": settings.app_name,

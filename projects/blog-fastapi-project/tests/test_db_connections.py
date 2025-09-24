@@ -4,8 +4,10 @@ Test script to demonstrate different database connections
 """
 import os
 import asyncio
+import pytest
 from src.core.db_connection import get_database_url, get_db_session, get_test_db_session
 
+@pytest.mark.asyncio
 async def test_connections():
     print("=== Database Connection Test ===\n")
     

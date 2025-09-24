@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from src.core.database import Base
 from src.core.db_connection import get_db_session
 from src.modules.blog.models import BlogPost, Comment, Likes, PostStatus, CommentApprovalStatus
+from src.modules.blog.utils import BlogUtils
 from src.modules.user.models import User
 from datetime import datetime
 from typing import List, Optional
@@ -15,31 +16,46 @@ from src.modules.blog.schemas import BlogPostCreate, BlogPostUpdate, CommentBase
 class BlogService:
     def __init__(self):
         pass
+    
+
 
 ######## BlogPost Methods #########
     async def create_post(self, post_data: BlogPostCreate) -> BlogPost:
         async for db in get_db_session():
+            # convert tags list to comma separated string for database storage
+            post_data.tags = BlogUtils.convert_tags_to_string(post_data.tags)
             new_post = BlogPost(**post_data.model_dump())
             db.add(new_post)
             await db.commit()
             await db.refresh(new_post)
+            # convert tags back to list for response
+            new_post.tags = BlogUtils.convert_tags_to_list(new_post.tags)
             return new_post
     
     async def get_post(self, post_id: int) -> Optional[BlogPost]:
         async for db in get_db_session():
-            result = await db.execute(select(BlogPost).where(BlogPost.id == post_id))
-            return result.scalars().first()
+            result = await db.execute(select(BlogPost).where(BlogPost.id == post_id)) 
+            # convert comma separated string back to list
+            post = result.scalars().first()
+            if post:
+                post.tags = BlogUtils.convert_tags_to_list(post.tags)
+            return post
 
     async def update_post(self, post_id: int, post_data: BlogPostUpdate) -> Optional[BlogPost]:
         async for db in get_db_session():
+            # Only convert tags if they are provided in the update
+            if post_data.tags is not None:
+                post_data.tags = BlogUtils.convert_tags_to_string(post_data.tags)
             result = await db.execute(select(BlogPost).where(BlogPost.id == post_id))
             existing_post = result.scalars().first()
             if not existing_post:
                 return None
-            for key, value in post_data.model_dump().items():
+            for key, value in post_data.model_dump(exclude_unset=True).items():
                 setattr(existing_post, key, value)
             await db.commit()
             await db.refresh(existing_post)
+            # convert tags back to list for response
+            existing_post.tags = BlogUtils.convert_tags_to_list(existing_post.tags)
             return existing_post
 
     async def delete_post(self, post_id: int) -> bool:
@@ -54,9 +70,12 @@ class BlogService:
     
     async def list_posts(self, skip: int = 0, limit: int = 10) -> List[BlogPost]:
         async for db in get_db_session():
+            
             result = await db.execute(select(BlogPost).offset(skip).limit(limit))
-            return result.scalars().all()
-    
+            posts = result.scalars().all()
+            for post in posts:
+                post.tags = BlogUtils.convert_tags_to_list(post.tags)
+            return posts
 
 ######## Comment Methods #########
     async def create_comment(self, comment_data: CommentCreate) -> Comment:

@@ -100,26 +100,26 @@ class UserService:
                 if not user:
                     return None
 
-            if username is not None:
-                user.username = username
-            if email is not None:
-                user.email = email
-            if full_name is not None:
-                user.full_name = full_name
-            if password is not None:
-                user.hashed_password = pwd_context.hash(password)
-            if disabled is not None:
-                user.disabled = int(disabled)
-            
-            await db.commit()
-            await db.refresh(user)
-            return UserSchema(
-                id=user.id,
-                username=user.username,
-                email=user.email,
-                full_name=user.full_name,
-                disabled=bool(user.disabled)
-            )
+                if username is not None:
+                    user.username = username
+                if email is not None:
+                    user.email = email
+                if full_name is not None:
+                    user.full_name = full_name
+                if password is not None:
+                    user.hashed_password = pwd_context.hash(password)
+                if disabled is not None:
+                    user.disabled = int(disabled)
+                
+                await db.commit()
+                await db.refresh(user)
+                return UserSchema(
+                    id=user.id,
+                    username=user.username,
+                    email=user.email,
+                    full_name=user.full_name,
+                    disabled=bool(user.disabled)
+                )
         except Exception as e:
             logging.error(f"Error updating user: {e}")
             raise UserException(400, UserException.USER_UPDATE_FAILED)

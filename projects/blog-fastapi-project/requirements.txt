@@ -1,8 +1,12 @@
 
-fastapi 
-uvicorn
-pydantic-settings
-sqlalchemy>=2.0.0 
-aiosqlite
-passlib[bcrypt]
-python-jose[cryptography]
+# For development, use:
+# pip install -r requirements/dev.txt
+
+# For production, use:
+# pip install -r requirements/prod.txt
+
+# For testing only, use:
+# pip install -r requirements/test.txt
+
+# Default to development requirements
+-r requirements/dev.txt

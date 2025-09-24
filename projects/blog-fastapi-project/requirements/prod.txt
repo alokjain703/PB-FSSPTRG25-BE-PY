@@ -1,0 +1,17 @@
+# Production requirements
+# Include base requirements
+-r base.txt
+
+# Production-specific packages
+gunicorn>=21.0.0
+
+# Production database (uncomment when ready)
+# asyncpg>=0.29.0  # for PostgreSQL
+# psycopg2-binary>=2.9.0  # alternative PostgreSQL driver
+
+# Monitoring and logging
+# sentry-sdk[fastapi]>=1.32.0
+
+# Performance
+# redis>=5.0.0  # for caching
+# celery>=5.3.0  # for background tasks

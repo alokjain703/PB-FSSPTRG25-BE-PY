@@ -1,7 +1,11 @@
 # user routers
 from fastapi import APIRouter, HTTPException, status
+from src.modules.user.exceptions import UserException
 from src.modules.user.schemas import UserCreate, UserSchema, UserUpdate
 from src.modules.user.services import user_service
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 # create user router
@@ -11,12 +15,11 @@ router = APIRouter()
 async def create_user(user: UserCreate):
     try:
         return await user_service.create_user(**user.dict())
+    except UserException as ue:
+        raise HTTPException(status_code=ue.status_code, detail=ue.detail)
     except Exception as e:
-        # suppress hashed password in error message
-        detail = str(e)
-        if "hashed_password" in detail:
-            detail = detail.replace("hashed_password", "****")
-        raise HTTPException(status_code=400, detail=detail)
+        logger.error(f"Error creating user: {e}")
+        raise HTTPException(status_code=400, detail=UserException.USER_SERVICE_ERROR)
 
 #get all users 
 @router.get("/user/all-users", response_model=list[UserSchema])

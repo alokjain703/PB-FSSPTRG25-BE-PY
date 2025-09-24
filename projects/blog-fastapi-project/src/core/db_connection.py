@@ -9,9 +9,12 @@ def get_database_url():
     env = os.getenv("FASTAPI_ENV", "development")
     
     if env == "test":
-        return "sqlite+aiosqlite:///test-db/database-test.db"
+        # get it from env variable or default to test DB
+        return os.getenv("DATABASE_URL", "sqlite+aiosqlite:///test-db/test-db.db")
+    elif env == "production":
+        return os.getenv("DATABASE_URL", "sqlite+aiosqlite:///test-db/prod-db.db")
     else:
-        return "sqlite+aiosqlite:///test-db/database.db"
+        return os.getenv("DATABASE_URL", "sqlite+aiosqlite:///test-db/dev-db.db")
 
 def get_engine():
     database_url = get_database_url()

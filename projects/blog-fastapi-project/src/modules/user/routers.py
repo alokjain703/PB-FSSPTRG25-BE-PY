@@ -6,8 +6,17 @@ from src.modules.user.services import user_service
 router = APIRouter()
 # create user router
 @router.post("/users/", response_model=UserSchema)
+# send error message if unique constraint or any other error occurs
+
 async def create_user(user: UserCreate):
-    return await user_service.create_user(**user.dict())
+    try:
+        return await user_service.create_user(**user.dict())
+    except Exception as e:
+        # suppress hashed password in error message
+        detail = str(e)
+        if "hashed_password" in detail:
+            detail = detail.replace("hashed_password", "****")
+        raise HTTPException(status_code=400, detail=detail)
 
 #get all users 
 @router.get("/user/all-users", response_model=list[UserSchema])

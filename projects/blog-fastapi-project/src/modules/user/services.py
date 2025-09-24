@@ -5,6 +5,7 @@ from src.modules.user.models import User
 from src.modules.user.schemas import UserSchema
 from passlib.context import CryptContext
 from src.core.db_connection import get_db_session
+from fastapi import HTTPException
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 # Function to get user by username
@@ -46,10 +47,12 @@ class UserService:
     async def create_user(self, username: str, email: str, full_name: str, password: str) -> UserSchema:
         """Create a new user"""
         
-        async for db in get_db_session():
-            hashed_password = pwd_context.hash(password)
-            new_user = User(
-                username=username,
+        # return proper error message if unique constraint or any other error occurs
+        try:
+            async for db in get_db_session():
+                hashed_password = pwd_context.hash(password)
+                new_user = User(
+                    username=username,
                 email=email,
                 full_name=full_name,
                 hashed_password=hashed_password,
@@ -65,6 +68,9 @@ class UserService:
                 full_name=new_user.full_name,
                 disabled=bool(new_user.disabled)
             )
+        except Exception as e:
+            # return general application exception
+            raise HTTPException(status_code=400, detail="An error occurred while creating user. Please check the details and try again.")
 
     async def update_user(
         self,
